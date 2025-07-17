@@ -1,0 +1,10 @@
+name: Iris-Classifier-Tutorial
+
+python_env: python_env.yaml
+
+entry_points:
+  main:
+    parameters:
+      C: {type: float, default: 1.0}
+      max_iter: {type: int, default: 200}
+    command: "python train.py --C {C} --max_iter {max_iter}"

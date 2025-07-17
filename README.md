@@ -22,3 +22,16 @@ We should see the following things logged:
 ```bash
 mlflow ui
 ```
+
+## MLflow Projects
+An MLproject is a convention for packaging code to make it reproducible.
+It specifies the environment and entry points for running the code.
+This allows anyone to run the training with a single command.
+
+### Run the MLproject Locally
+This command tells MLflow to run the project using your *currently activated* 
+local virtual environment (`.venv`), rather than trying to create a new one. This is
+a robust and fast way to run projects locally, as it avoids potential issues
+with MLflow locating a specific Conda installation on your system.
+
+`mlflow run . --experiment-name "Iris-Project-Runs" --env-manager=local`
