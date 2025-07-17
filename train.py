@@ -39,18 +39,26 @@ def main(args):
         print(f"  Accuracy: {accuracy:.4f}")
 
         # Log the model as an artifact
-        # By setting an input_example, MLflow can infer the model's signature.
-        # This is a best practice for model validation and deployment.
+        # By setting an input_example, MLflow can infer the model's signature,
+        # which is a best practice. If a registered_model_name is provided,
+        # this will also create a new version of the model in the Model Registry.
         mlflow.sklearn.log_model(
             sk_model=model,
             artifact_path="iris-logreg-model",
-            input_example=X_train)
-        print(f"Model saved in run {mlflow.active_run().info.run_id}")
+            input_example=X_train,
+            registered_model_name=args.register_model_name
+        )
+        print(f"Model artifact saved in run {mlflow.active_run().info.run_id}")
+        if args.register_model_name and args.register_model_name.lower() != 'none':
+            print(f"Model registered under name: '{args.register_model_name}'")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--C", type=float, default=1.0, help="Inverse of regularization strength")
     parser.add_argument("--max_iter", type=int, default=200, help="Maximum number of iterations")
+    parser.add_argument(
+        "--register-model-name", type=str, default="None", help="If provided, register model with this name."
+    )
     args = parser.parse_args()
     main(args)
