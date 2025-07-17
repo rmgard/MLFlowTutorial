@@ -35,3 +35,36 @@ a robust and fast way to run projects locally, as it avoids potential issues
 with MLflow locating a specific Conda installation on your system.
 
 `mlflow run . --experiment-name "Iris-Project-Runs" --env-manager=local`
+
+## MLflow Model Registry
+The Model Registry is a centralized hub to manage the versioning of your models. You can 
+manually test out your models with the UI on the Model Registry's UI.
+
+### Register the Model
+Run the training script. Use the `--register-model-name` flag.
+This logs the model as an artifact and creates `Version 1` of the model in
+the registry under the `iris-classifier` name.
+
+#### Example:
+1) Register the model version:
+```
+python train.py \--C 0.37 --max_iter 134 --register-model-name proto-model1
+```
+
+2) Go to the MLflow UI
+```bash 
+mlflow ui
+```
+
+3) You can promote the model (In the example above we call it `proto-model1`) to production. Note that we are on the 
+`Models` tab on the top.
+
+![mlflow_model_splash.png](images/mlflow_model_splash.png)
+
+Clicking into the `proto-model1` model, then the corresponding most updated version, you can promote your model with
+the `Promote model` button at the top right. Go through the UI to tinker with the registered model as you wish.
+
+4) Test the served model with the `predict.py` script. 
+```
+python predict.py
+```
