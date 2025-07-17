@@ -2,4 +2,5 @@ python: "3.9"
 dependencies:
   - scikit-learn
   - pandas
+  - requests
   - mlflow>=1.0
