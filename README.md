@@ -36,35 +36,48 @@ with MLflow locating a specific Conda installation on your system.
 
 `mlflow run . --experiment-name "Iris-Project-Runs" --env-manager=local`
 
-## MLflow Model Registry
-The Model Registry is a centralized hub to manage the versioning of your models. You can 
-manually test out your models with the UI on the Model Registry's UI.
+## MLflow Model Registry and Serving
+The Model Registry is a centralized hub for model versioning, and MLflow makes it easy to deploy these versioned models as live services.
 
-### Register the Model
-Run the training script. Use the `--register-model-name` flag.
-This logs the model as an artifact and creates `Version 1` of the model in
-the registry under the `iris-classifier` name.
+> **Note:** The concept of model "Stages" (`Staging`, `Production`) has been
+> deprecated in favor of a more flexible system of aliases and tags. This
+> tutorial uses the modern alias-based approach.
 
-#### Example:
-1) Register the model version:
-```
-python train.py \--C 0.37 --max_iter 134 --register-model-name proto-model1
-```
+### 1. Register a Model Version
+Run the training script with the `--register-model-name` flag. This will log the
+model and create `Version 1` of it in the registry under the name `iris-classifier`.
 
-2) Go to the MLflow UI
-```bash 
-mlflow ui
+```bash
+python train.py --C 0.1 --register-model-name "iris-classifier"
 ```
 
-3) You can promote the model (In the example above we call it `proto-model1`) to production. Note that we are on the 
-`Models` tab on the top.
+### 2. Manage the Model using Aliases in the UI
+Go to the MLflow UI (`http://localhost:5000`) to manage your model version.
+1.  Click the **Models** tab on the left. You will see `iris-classifier`.
+2.  Click on the model name, then on the version you wish to manage (e.g., `Version 1`).
+3.  Find the **Aliases** section on the model version page.
+4.  Click the pencil icon (edit) to add a new alias. Type `production` and hit enter. A model version can have multiple aliases (e.g., `production`, `champion`).
 
-![mlflow_model_splash.png](images/mlflow_model_splash.png)
+### 3. Load a Model from the Registry (Optional)
+The `predict.py` script demonstrates how an application can load a model directly from the registry by its alias for batch predictions, without needing a live server.
 
-Clicking into the `proto-model1` model, then the corresponding most updated version, you can promote your model with
-the `Promote model` button at the top right. Go through the UI to tinker with the registered model as you wish.
-
-4) Test the served model with the `predict.py` script. 
-```
+```bash
 python predict.py
 ```
+
+### 4. Deploy the Model as a REST API
+The final step is to deploy a registered model as a live REST API endpoint.
+
+**In a terminal**, run the following command. It will find the model version with the `production` alias, load it, and start a server on port 1234.
+
+```bash
+mlflow ui
+mlflow models serve -m 'models:/iris-classifier@production' -p 1234 --env-manager=local
+```
+
+You will see output like `Uvicorn running on http://127.0.0.1:1234`. The server is now ready.
+
+#### b) Query the Deployed Model
+**Open a new, separate terminal** and run the `query_model.py` script. 
+It will send sample data to the running server and print the predictions it receives back.
+

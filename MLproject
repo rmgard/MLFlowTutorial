@@ -7,5 +7,5 @@ entry_points:
     parameters:
       C: {type: float, default: 1.0}
       max_iter: {type: int, default: 200}
-      register_model_name: {type: string, default: None}
+      register_model_name: {type: string, default: "None"}
     command: "python train.py --C {C} --max_iter {max_iter} --register-model-name {register_model_name}"
