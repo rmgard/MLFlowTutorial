@@ -10,6 +10,7 @@ on:
 jobs:
   train-and-register:
     runs-on: ubuntu-latest
+    environment: MLflow
     steps:
     - name: Check out repository
       uses: actions/checkout@v3
@@ -27,7 +28,7 @@ jobs:
     - name: Run MLflow Training
       env:
         # Use GitHub Secrets to securely store your Databricks credentials
-        MLFLOW_TRACKING_URI: databricks
+        MLFLOW_TRACKING_URI: databricks-uc
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
       run: |
