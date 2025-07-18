@@ -1,0 +1,37 @@
+name: MLflow Training Pipeline
+
+# This workflow runs on every push to the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  train-and-register:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run MLflow Training
+      env:
+        # Use GitHub Secrets to securely store your Databricks credentials
+        MLFLOW_TRACKING_URI: databricks
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      run: |
+        python train.py \
+          --C 1.0 \
+          --experiment-name "/Users/your-databricks-email@domain.com/github-actions-tutorial" \
+          --register-model-name "main.default.iris_ci_cd_model"
