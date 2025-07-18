@@ -42,6 +42,12 @@ def main(args):
         print(f"Logistic Regression model (C={args.C})")
         print(f"  Accuracy: {accuracy:.4f}")
 
+        # Handle the registered_model_name argument
+        retistered_model_name = args.register_model_name
+        if retistered_model_name and retistered_model_name.lower() in ['none', '']:
+            registered_model_name = None
+
+
         # Log the model as an artifact
         # By setting an input_example, MLflow can infer the model's signature,
         # which is a best practice. If a registered_model_name is provided,
@@ -50,11 +56,11 @@ def main(args):
             sk_model=model,
             artifact_path="iris-logreg-model",
             input_example=X_train,
-            registered_model_name=args.register_model_name
+            registered_model_name=registered_model_name
         )
         print(f"Model artifact saved in run {mlflow.active_run().info.run_id}")
-        if args.register_model_name and args.register_model_name.lower() != 'none':
-            print(f"Model registered under name: '{args.register_model_name}'")
+        if registered_model_name:
+            print(f"Model registered under name: '{registered_model_name}'")
 
 
 if __name__ == "__main__":
