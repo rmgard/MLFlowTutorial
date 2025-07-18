@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_iter", type=int, default=200, help="Maximum number of iterations")
     parser.add_argument("--experiment-name", type=str, default=None, help="Name the MLflow experiment.")
     parser.add_argument(
-        "--register-model-name", type=str, default="None", help="If provided, register model with this name."
+        "--register-model-name", type=str, default=None, help="If provided, register model with this name."
     )
     args = parser.parse_args()
     main(args)
