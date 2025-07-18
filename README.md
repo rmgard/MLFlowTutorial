@@ -65,10 +65,12 @@ The `predict.py` script demonstrates how an application can load a model directl
 python predict.py
 ```
 
-### 4. Deploy the Model as a REST API
+### 4. Deploy the Model as a REST API (Serving) 
 The final step is to deploy a registered model as a live REST API endpoint.
 
-**In a terminal**, run the following command. It will find the model version with the `production` alias, load it, and start a server on port 1234.
+#### a) Serve the Production Model 
+In a terminal, run the following command. It finds the model with the production alias 
+and starts a server. This command will continue to run in your terminal.
 
 ```bash
 mlflow ui
@@ -81,3 +83,34 @@ You will see output like `Uvicorn running on http://127.0.0.1:1234`. The server 
 **Open a new, separate terminal** and run the `query_model.py` script. 
 It will send sample data to the running server and print the predictions it receives back.
 
+## Connecting this to a Production Environment (Databricks)
+Everything we've done so far has used a local MLflow tracking server (the mlruns directory). 
+In a real-world setting, you would use a centralized, remote tracking server for 
+collaboration and governance. 
+Databricks provides a managed, best-in-class MLflow server. 
+This section shows you how to connect your local code to a remote Databricks workspace.
+
+### 1. Set up Databricks 
+1.  Create a free account: Sign up for the Databricks Community Edition. It's free and doesn't require a credit card. 
+2.  Generate a token: Once logged in, go to `Settings` > `(User) Developer` > `Access Tokens`. Generate a new token 
+    and copy it somewhere safe. You will not be able to see it again. 
+
+### 2. Configure Your Local Machine 
+1.  Install the CLI: Make sure your virtual environment is active and run `pip install databricks-cli`. 
+2.  Configure connection: Run `databricks configure --token`.
+  * **Databricks Host**: Enter your workspace URL (e.g., `https://community.cloud.databricks.com`).
+  * **Token**: Paste the token you generated in the previous step.
+
+### 3. Run an Experiment Remotely 
+Now, you can run your training script while logging to Databricks. 
+You must set the `MLFLOW_TRACKING_URI` environment variable and provide an experiment name.
+This tells MLflow to log to Databricks instead of your local mlruns folder. 
+
+A best practice for experiment naming in Databricks is to use a path that includes your 
+username, for example: `/Users/your.email@company.com/mlflow-tutorial`.
+
+```bash
+# This special 'databricks' URI tells MLflow to use the connection 
+# you just configured. 
+MLFLOW_TRACKING_URI=databricks python train.py --C 0.88 -- experiment-name /Users/your.email@company.com/mlflow-tutorial --register-model-name "iris-classifier-remote"
+```

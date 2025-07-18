@@ -17,6 +17,10 @@ def main(args):
     X = pd.DataFrame(iris.data, columns=iris.feature_names)
     y = pd.Series(iris.target, name="target")
 
+    #Set the experiment name for production env. Create experiment if DNE.
+    if args.experiment_name:
+        mlflow.set_experiment(args.experiment_name)
+
     # Start an Mlflow run. This is a context manager that handles start and end of run.
     with mlflow.start_run():
         # Split the data into training and testing sets
@@ -57,6 +61,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--C", type=float, default=1.0, help="Inverse of regularization strength")
     parser.add_argument("--max_iter", type=int, default=200, help="Maximum number of iterations")
+    parser.add_argument("--experiment-name", type=str, default=None, help="Name the MLflow experiment.")
     parser.add_argument(
         "--register-model-name", type=str, default="None", help="If provided, register model with this name."
     )
