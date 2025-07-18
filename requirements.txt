@@ -1,5 +1,5 @@
 scikit-learn
 pandas
 requests
-databricks-cli
+databricks-sdk
 mlflow>=1.0
