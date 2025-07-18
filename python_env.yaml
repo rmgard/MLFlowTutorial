@@ -4,4 +4,4 @@ dependencies:
   - pandas
   - requests
   - databricks-sdk
-  - mlflow==3.1.1
+  - mlflow==2.13.0

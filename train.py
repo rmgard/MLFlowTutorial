@@ -43,8 +43,8 @@ def main(args):
         print(f"  Accuracy: {accuracy:.4f}")
 
         # Handle the registered_model_name argument
-        retistered_model_name = args.register_model_name
-        if retistered_model_name and retistered_model_name.lower() in ['none', '']:
+        registered_model_name = args.register_model_name
+        if registered_model_name and registered_model_name.lower() in ['none', '']:
             registered_model_name = None
 
 
