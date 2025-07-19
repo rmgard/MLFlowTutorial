@@ -32,8 +32,9 @@ jobs:
         MLFLOW_REGISTRY_URI: databricks-uc
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        DATABRICKS_USER: ${{ secrets.DATABRICKS_USER }}
       run: |
         python train.py \
           --C 1.0 \
-          --experiment-name "/Users/${ secrets.DATABRICKS_USER }/github-actions-tutorial" \
+          --experiment-name "/Users/$DATABRICKS_USER/github-actions-tutorial" \
           --register-model-name "ci_cd_catalog.ml_models.iris_ci_cd_model"
