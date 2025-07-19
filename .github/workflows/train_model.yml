@@ -35,5 +35,5 @@ jobs:
       run: |
         python train.py \
           --C 1.0 \
-          --experiment-name "/Users/${ secrets.GITHUB_ACTOR }/github-actions-tutorial" \
+          --experiment-name "/Users/${ secrets.DATABRICKS_USER }/github-actions-tutorial" \
           --register-model-name "ci_cd_catalog.ml_models.iris_ci_cd_model"
