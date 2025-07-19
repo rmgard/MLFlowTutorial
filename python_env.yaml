@@ -3,4 +3,5 @@ dependencies:
   - scikit-learn
   - pandas
   - requests
-  - mlflow>=1.0
+  - databricks-sdk
+  - mlflow==2.13.0
